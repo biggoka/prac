@@ -1,0 +1,10 @@
+Steve,user0,1001,886
+Stephanie,user1,1002,6915
+Laura,user2,1003,8335
+Anna,user3,1004,492
+Patrick,user4,1005,1421
+Den,user5,1006,27
+Emily,user6,1007,59
+Laura,user7,1008,3926
+Jack,user8,1009,3426
+Jenna,user9,1010,5736
