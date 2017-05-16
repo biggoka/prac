@@ -1,15 +1,23 @@
 #pragma once
 
+#include <list>
+#include <set>
+#include <string>
 #include <memory>
 
-class Schedule;
+class ScheduleCellEntry;
 
 class ScheduleCell {
-public:
-    std::shared_ptr<Schedule> schedule;
 
-    std::string subject;
-    std::string professor_name;
-    size_t group;
-    size_t room;
-}
+    std::list<std::shared_ptr<ScheduleCellEntry>> entries;
+
+    std::set<int> groups;
+    std::set<int> rooms;
+    std::set<std::string> professors;
+
+public:
+
+    bool add_entry(std::shared_ptr<ScheduleCellEntry> entry);
+    bool remove_entry(std::shared_ptr<ScheduleCellEntry> entry);
+
+};

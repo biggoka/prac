@@ -1,5 +1,3 @@
-CC = g++
-
 ERR_FILE = err.txt
 
 INCLDIRS = \
@@ -24,18 +22,27 @@ OBJDIR = \
 TESTOBJDIR = \
 	test/obj
 
-DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.hpp Request.hpp
+
+
+DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.hpp Request.hpp Schedule.hpp \
+	ScheduleCell.hpp ScheduleCellEntry.hpp ScheduleTime.hpp
+
+
 
 OBJS_ = $(DEPS:.hpp=.o)
 OBJS = $(patsubst %, $(OBJDIR)/%, $(OBJS_)) 
 
-MAINS_ = user_main 
+MAINS_ = user_main admin_main
 MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
 
+
 TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp
+
 TESTS = $(TESTS_:.cpp=.o)
 TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
 
+
+CC = g++
 DEBUG = 
 CFLAGS = -O2 -std=c++14 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 
 LFLAGS = $(CFLAGS)
@@ -47,7 +54,7 @@ vpath %.cpp $(SRCDIRS)
 vpath %.o $(OBJDIR)
 
 
-all: folders  googletest build test
+all: folders googletest build test
 
 runadmin:
 	@./admin_main
@@ -55,11 +62,9 @@ runadmin:
 runuser:
 	@./user_main
 
-# .PHONY: build
-build: folders googletest $(OBJS) $(MAIN_OBJS) $(MAINS_)
-#	@$(CC) $(CFLAGS) -o main $(MAIN_OBJS) $(OBJS)
-#	@echo "linking $^"
-	@ $(foreach M, $(MAINS_), $(CC) $(CFLAGS) -o $(M) $(OBJDIR)/$(M).o $(OBJS) )
+
+build: folders $(OBJS) $(MAIN_OBJS) $(MAINS_)
+	@ $(foreach M, $(MAINS_), echo Linking $(M) && $(CC) $(CFLAGS) -o $(M) $(OBJDIR)/$(M).o $(OBJS) ;)
 
 $(MAINS_): $(OBJS) $(MAIN_OBJS)
 	@ $(CC) $(CFLAGS) -o $(@) $(OBJDIR)/$(@).o $(OBJS)
