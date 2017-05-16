@@ -29,7 +29,7 @@ DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.
 OBJS_ = $(DEPS:.hpp=.o)
 OBJS = $(patsubst %, $(OBJDIR)/%, $(OBJS_)) 
 
-MAINS_ = user_main admin_main
+MAINS_ = user_main 
 MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
 
 TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp
@@ -37,7 +37,7 @@ TESTS = $(TESTS_:.cpp=.o)
 TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
 
 DEBUG = 
-CFLAGS = -O2 -std=c++11 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 2>$(ERR_FILE)
+CFLAGS = -O2 -std=c++14 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 
 LFLAGS = $(CFLAGS)
 
 
@@ -47,21 +47,7 @@ vpath %.cpp $(SRCDIRS)
 vpath %.o $(OBJDIR)
 
 
-all: folders build test
-
-
-# .PHONY: build
-build: $(OBJS) $(MAIN_OBJS) $(MAINS_)
-#	@$(CC) $(CFLAGS) -o main $(MAIN_OBJS) $(OBJS)
-#	@echo "linking $^"
-	#$(foreach M, $(MAINS_), $(CC) $(CFLAGS) -o $(M) $(OBJDIR)/$(M).o $(OBJS) ;)
-
-$(MAINS_): $(OBJS) $(MAIN_OBJS)
-	$(CC) $(CFLAGS) -o $(@) $(OBJDIR)/$(@).o $(OBJS)
-
-$(OBJDIR)/%.o: %.cpp $(DEPS)
-	@echo "compiling $@"
-	@$(CC) $(CFLAGS) -c -o $@ $<
+all: folders  googletest build test
 
 runadmin:
 	@./admin_main
@@ -69,44 +55,56 @@ runadmin:
 runuser:
 	@./user_main
 
-test: $(TEST_OBJS) $(OBJS)
-	@$(CC) $(CFLAGS) -o tests $(TEST_OBJS) $(OBJS) -pthread googletest/googletest/libgtest.a
-	@./tests
-#	$(CC) src/**/*.cpp test/src/*.cpp $(CFLAGS) -o test/main -isystem googletest/googletest/include -pthread googletest/googletest/libgtest.a
+# .PHONY: build
+build: folders googletest $(OBJS) $(MAIN_OBJS) $(MAINS_)
+#	@$(CC) $(CFLAGS) -o main $(MAIN_OBJS) $(OBJS)
+#	@echo "linking $^"
+	@ $(foreach M, $(MAINS_), $(CC) $(CFLAGS) -o $(M) $(OBJDIR)/$(M).o $(OBJS) )
+
+$(MAINS_): $(OBJS) $(MAIN_OBJS)
+	@ $(CC) $(CFLAGS) -o $(@) $(OBJDIR)/$(@).o $(OBJS)
+
+$(OBJDIR)/%.o: %.cpp $(DEPS)
+	@ echo "compiling $@"
+	@ $(CC) $(CFLAGS) -c -o $@ $<
+
+
+test: googletest $(TEST_OBJS) $(OBJS)
+	@ $(CC) $(CFLAGS) -o test_main $(TEST_OBJS) $(OBJS) -pthread libgtest.a
+	@ ./test_main
+
 
 $(TESTOBJDIR)/%.o: %.cpp
-	@echo "compiling $@"
-	@$(CC) $(CFLAGS) -c -o $@ $< -isystem googletest/googletest/include 
+	@ echo "compiling $@"
+	@ $(CC) $(CFLAGS) -c -o $@ $< -isystem googletest/googletest/include 
 
 rebuild: clean build FORCE
 
 clean:
-	@rm -f obj/*.o main *.out *.o err.txt *.html
-	@rm -f test/obj/*
-	@echo "Cleaned"
+	@ echo Cleaning
+	@ rm -f obj/*.o main *.out *.o err.txt *.html admin_main user_main test_main tests
+	@ rm -f test/obj/* libgtest.a
+	@ echo "Cleaned"
 
 FORCE:
 
 folders: test/obj obj
 
 obj:
-	@mkdir $@
+	@ mkdir $@
 
 test/obj:
-	@mkdir $@
+	@ mkdir $@
 
+libgtest.a: 
+	@ echo Compiling Google Test
+	@ g++ -isystem googletest/googletest/include -Igoogletest/googletest/ \
+	-pthread -c googletest/googletest/src/gtest-all.cc
+	@ ar -rv libgtest.a gtest-all.o
+	@ rm gtest-all.o
 
-# # build: $(OBJ)
-# # 	$(CC) src/main.cpp -o main $^ $(CFLAGS)
+googletest: googletest/googletest/src/gtest-all.cc libgtest.a
 
-
-# build:
-# #	$(CC) src/**/*.cpp src/main.cpp $(CFLAGS) -o main
-# #	$(CC) src/**/*.cpp src/datagen.cpp $(CFLAGS) -o datagen
-# #	$(CC) src/**/*.cpp test/src/*.cpp $(CFLAGS) -o test/main -isystem googletest/googletest/include -pthread googletest/googletest/libgtest.a 
-
-# clean:
-# #	rm -f *.o main datagen
-
-# reset: clean
-# #	rm -f *.txt
+googletest/googletest/src/gtest-all.cc:
+	@ echo Downloading Google Test
+	@ git clone https://github.com/google/googletest.git

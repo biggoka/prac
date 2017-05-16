@@ -6,14 +6,14 @@
 
 TEST(SplitterTest, simpleInput) {
     std::string input = "hello there";
-    std::vector<const std::string> res = Splitter::split(input, ' ');
+    std::vector<std::string> res = Splitter::split(input, ' ');
     ASSERT_EQ(2, res.size());
     ASSERT_EQ("hello", res[0]);
 }
 
 TEST(SplitterTest, emptyInput) {
     std::string input = "";
-    std::vector<const std::string> res = Splitter::split(input, ' ');
+    std::vector<std::string> res = Splitter::split(input, ' ');
     ASSERT_EQ(0, res.size());
     //ASSERT_EQ("hello", res[0]);
 }

@@ -1,0 +1,63 @@
+
+CC = g++
+
+ERR_FILE = err.txt
+
+INCLDIRS = \
+	include/model \
+	include/interface \
+	include/logic \
+	include/utils
+
+SRCDIR = src test
+
+SRCDIRS = \
+	$(SRCDIR) \
+	src/model \
+	src/interface \
+	src/logic \
+	src/utils \
+	test/src
+
+OBJDIR = \
+	obj
+
+TESTOBJDIR = \
+	test/obj
+
+DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.hpp Request.hpp
+
+OBJS_ = $(DEPS:.hpp=.o)
+OBJS = $(patsubst %, $(OBJDIR)/%, $(OBJS_)) 
+
+MAINS_ = user_main 
+MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
+
+TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp
+TESTS = $(TESTS_:.cpp=.o)
+TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
+
+DEBUG = 
+CFLAGS = -O2 -std=c++11 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 
+LFLAGS = $(CFLAGS)
+
+vpath
+vpath %.hpp $(INCLDIRS)
+vpath %.cpp $(SRCDIRS)
+vpath %.o $(OBJDIR)
+
+HFILES = $(DEPS)
+CFILES = $(DEPS:.hpp=.cpp)
+SRCFILES = $(CFILES) $(HFILES)
+deps.make: $(SRCFILES) 
+	g++ -MM $(CFLAGS) src/* src/**/* > deps.make
+include deps.make
+
+build: user_main.o
+	$(CC) $(CFLAGS) user_main.o -o user_main
+
+
+FORCE:
+
+# all:
+# 	$(CC) -MM $(CFLAGS) src/user_main.cpp

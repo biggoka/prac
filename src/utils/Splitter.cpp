@@ -1,9 +1,9 @@
 #include "Splitter.hpp"
 
-#include <vector>
+//#include <vector>
 
-std::vector<const std::string> Splitter::split(const std::string &str, const char &splt) {
-    std::vector<const std::string> vec;
+std::vector<std::string> Splitter::split(const std::string &str, const char &splt) {
+    std::vector<std::string> vec;
 
     size_t pos = 0;
     size_t find;
