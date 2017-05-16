@@ -1,2 +1,9 @@
+
+
 *.[ao]
 googletest
+
+
+test_main
+user_main
+admin_main
