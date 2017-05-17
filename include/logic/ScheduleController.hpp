@@ -11,7 +11,8 @@ class ScheduleController {
     Schedule schedule;
     std::list<std::shared_ptr<Request>> requests;
 
-    bool recursive_try(std::shared_ptr<Request>, std::shared_ptr<Request>);
+    bool recursive_try(std::list<std::shared_ptr<Request>>::iterator start,
+        std::list<std::shared_ptr<Request>>::iterator end);
 
 public:
     void add_request(std::shared_ptr<Request> request);

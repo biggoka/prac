@@ -36,14 +36,14 @@ MAINS_ = user_main admin_main
 MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
 
 
-TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp
+TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp ScheduleControllerTest.cpp
 
 TESTS = $(TESTS_:.cpp=.o)
 TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
 
 
 CC = g++
-DEBUG = 
+DEBUG = --coverage
 CFLAGS = -O2 -std=c++14 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 
 LFLAGS = $(CFLAGS)
 
@@ -54,7 +54,7 @@ vpath %.cpp $(SRCDIRS)
 vpath %.o $(OBJDIR)
 
 
-all: folders googletest build test
+all: folders googletest lcov build test
 
 runadmin:
 	@./admin_main
@@ -87,8 +87,10 @@ rebuild: clean build FORCE
 
 clean:
 	@ echo Cleaning
-	@ rm -f obj/*.o main *.out *.o err.txt *.html admin_main user_main test_main tests
+	@ rm -f obj/*.o main *.out *.o err.txt *.html admin_main user_main test_main tests obj/*.gcno obj/*.gcda \
+	test/obj/*.gcda test/obj/*.gcno app.info
 	@ rm -f test/obj/* libgtest.a
+	@ rm -rf coverage
 	@ echo "Cleaned"
 
 FORCE:
@@ -112,4 +114,20 @@ googletest: googletest/googletest/src/gtest-all.cc libgtest.a
 
 googletest/googletest/src/gtest-all.cc:
 	@ echo Downloading Google Test
-	@ git clone https://github.com/google/googletest.git
+	@ git clone https://github.com/google/googletest.git 
+
+
+
+coverage: lcov FORCE
+	@ echo Generating coverage
+	@ lcov/bin/lcov --directory obj --directory test/obj --capture --output-file app.info -q 
+	@ lcov/bin/genhtml app.info --output-directory coverage/ -q
+	@ xdg-open coverage/index.html
+
+
+
+lcov: lcov/README
+
+lcov/README:
+	@ echo Downloading Lcov
+	@ git clone https://github.com/linux-test-project/lcov.git 

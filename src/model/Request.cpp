@@ -10,14 +10,14 @@ Request::Request() {
     }
 }
 
-void Request::set_day(short week_day, short pair_number, bool is) {
+void Request::set_day(int week_day, int pair_number, bool is) {
     if (week_day > 7 or week_day < 1 or pair_number > 7 or pair_number < 1) {
         throw std::invalid_argument("wrong argument in Request::set_day");
     }
     days[week_day - 1][pair_number - 1] = is;
 }
 
-bool Request::day_is_set(short week_day, short pair_number) const {
+bool Request::day_is_set(int week_day, int pair_number) const {
     if (week_day > 7 or week_day < 1 or pair_number > 7 or pair_number < 1) {
         throw std::invalid_argument("wrong argument in Request::set_day");
     }
@@ -34,7 +34,7 @@ bool Request::operator==(const Request &r) const {
         }
     }
 
-    if (professor_name != r.professor_name or \
+    if (professor != r.professor or \
         subject != r.subject or \
         group_id != r.group_id or \
         room_id != r.room_id) 

@@ -1,9 +1,16 @@
 
 
 *.[ao]
+*.gcno
+*.gcda
+*.html
+
 googletest
+lcov
+coverage
 
 
 test_main
 user_main
 admin_main
+app.info

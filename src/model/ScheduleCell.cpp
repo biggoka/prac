@@ -3,6 +3,7 @@
 #include "ScheduleCellEntry.hpp"
 
 #include <memory>
+#include <iostream>
 
 bool ScheduleCell::add_entry(std::shared_ptr<ScheduleCellEntry> entry) {
     if (groups.find(entry->group_id) != groups.end() or \
@@ -10,6 +11,8 @@ bool ScheduleCell::add_entry(std::shared_ptr<ScheduleCellEntry> entry) {
         professors.find(entry->professor) != professors.end()) {
         return false;
     }
+
+
 
     groups.insert(entry->group_id);
     rooms.insert(entry->room_id);
@@ -24,17 +27,9 @@ bool ScheduleCell::remove_entry(std::shared_ptr<ScheduleCellEntry> entry) {
         if (*(*it) == *entry){
             entries.erase(it);
 
-            if (auto it = groups.find(entry->group_id) != groups.end()) {
-                groups.erase(it);
-            }
-
-            if (auto it = rooms.find(entry->room_id) != rooms.end()) {
-                rooms.erase(it);
-            }
-
-            if (auto it = professors.find(entry->professor) != professors.end()) {
-                professors.erase(entry->professor);
-            }
+            groups.erase(entry->group_id);
+            rooms.erase(entry->room_id);
+            professors.erase(entry->professor);
 
             return true;
             break;

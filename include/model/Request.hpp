@@ -5,18 +5,18 @@
 
 class Request {
 public:
-    std::string professor_name;
+    std::string professor;
     std::string subject;
 
     bool days[7][7]; // 7 days in a week by 7 pairs in a day; first is day in a week
 
-    size_t group_id;
-    size_t room_id;
+    int group_id;
+    int room_id;
 
     Request();
 
-    void set_day(short week_day, short pair_number, bool is);
-    bool day_is_set(short week_day, short pair_number) const;
+    void set_day(int week_day, int pair_number, bool is);
+    bool day_is_set(int week_day, int pair_number) const;
 
     bool operator==(const Request &r) const;
 };
