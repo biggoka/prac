@@ -14,4 +14,6 @@ public:
 
     ScheduleCellEntry(int group_id, int room_id, const std::string &professor, const std::string &subject);
 
+    bool operator==(const ScheduleCellEntry&) const;
+
 };

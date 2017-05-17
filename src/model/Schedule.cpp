@@ -11,3 +11,11 @@ Schedule::Schedule() {
         }
     }
 }
+
+bool Schedule::add_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time) {
+    return cells[time->get_day_of_week()][time->get_lecture_number()]->add_entry(entry);
+}
+
+void Schedule::remove_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time) {
+    cells[time->get_day_of_week()][time->get_lecture_number()]->remove_entry(entry);
+}

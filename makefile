@@ -25,7 +25,7 @@ TESTOBJDIR = \
 
 
 DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.hpp Request.hpp Schedule.hpp \
-	ScheduleCell.hpp ScheduleCellEntry.hpp ScheduleTime.hpp
+	ScheduleCell.hpp ScheduleCellEntry.hpp ScheduleTime.hpp ScheduleController.hpp
 
 
 

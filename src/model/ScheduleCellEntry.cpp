@@ -11,3 +11,13 @@ ScheduleCellEntry::ScheduleCellEntry(int _group_id, int _room_id, \
 {
 
 }
+
+bool ScheduleCellEntry::operator==(const ScheduleCellEntry &entr) const {
+    if (subject == entr.subject and \
+        professor == entr.professor and \
+        group_id == entr.group_id and \
+        room_id == entr.room_id) {
+        return true;
+    }
+    return false;
+}

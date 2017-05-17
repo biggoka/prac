@@ -13,7 +13,7 @@ class Schedule {
 public:
     Schedule();
 
-    bool add_entry(std::shared_ptr<ScheduleCellEntry> entry, ScheduleTime time);
+    bool add_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time);
 
-    void remove_entry(std::shared_ptr<ScheduleCellEntry> entry, ScheduleTime time);
+    void remove_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time);
 };

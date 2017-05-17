@@ -24,3 +24,24 @@ bool Request::day_is_set(short week_day, short pair_number) const {
 
     return days[week_day - 1][pair_number - 1];
 }
+
+bool Request::operator==(const Request &r) const {
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 7; j++) {
+            if (days[i][j] != r.days[i][j]) {
+                return false;
+            }
+        }
+    }
+
+    if (professor_name != r.professor_name or \
+        subject != r.subject or \
+        group_id != r.group_id or \
+        room_id != r.room_id) 
+    {
+        return false;
+    }
+
+    return true;
+
+}

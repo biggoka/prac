@@ -17,4 +17,6 @@ public:
 
     void set_day(short week_day, short pair_number, bool is);
     bool day_is_set(short week_day, short pair_number) const;
+
+    bool operator==(const Request &r) const;
 };
