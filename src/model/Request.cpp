@@ -1,24 +1,25 @@
 #include "Request.hpp"
+#include "Constants.hpp"
 
 #include <stdexcept>
 
 Request::Request() {
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 7; j++) {
+    for (int i = 0; i < Constants::DAYS_IN_WEEK; i++) {
+        for (int j = 0; j < Constants::LECTURES_IN_DAY; j++) {
             days[i][j] = false;
         }
     }
 }
 
 void Request::set_day(int week_day, int pair_number, bool is) {
-    if (week_day > 7 or week_day < 1 or pair_number > 7 or pair_number < 1) {
+    if (week_day > Constants::DAYS_IN_WEEK or week_day < 1 or pair_number > Constants::LECTURES_IN_DAY or pair_number < 1) {
         throw std::invalid_argument("wrong argument in Request::set_day");
     }
     days[week_day - 1][pair_number - 1] = is;
 }
 
 bool Request::day_is_set(int week_day, int pair_number) const {
-    if (week_day > 7 or week_day < 1 or pair_number > 7 or pair_number < 1) {
+    if (week_day > Constants::DAYS_IN_WEEK or week_day < 1 or pair_number > Constants::LECTURES_IN_DAY or pair_number < 1) {
         throw std::invalid_argument("wrong argument in Request::set_day");
     }
 
@@ -26,8 +27,8 @@ bool Request::day_is_set(int week_day, int pair_number) const {
 }
 
 bool Request::operator==(const Request &r) const {
-    for (int i = 0; i < 7; i++) {
-        for (int j = 0; j < 7; j++) {
+    for (int i = 0; i < Constants::DAYS_IN_WEEK; i++) {
+        for (int j = 0; j < Constants::LECTURES_IN_DAY; j++) {
             if (days[i][j] != r.days[i][j]) {
                 return false;
             }

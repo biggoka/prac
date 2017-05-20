@@ -9,6 +9,8 @@
 #include "ScheduleCellEntry.hpp"
 #include "ScheduleTime.hpp"
 
+#include "Constants.hpp"
+
 void ScheduleController::add_request(std::shared_ptr<Request> request) {
     requests.push_back(request);
 }
@@ -38,8 +40,8 @@ bool ScheduleController::recursive_try(std::list<std::shared_ptr<Request>>::iter
     std::shared_ptr<ScheduleCellEntry> entry = std::make_shared<ScheduleCellEntry>(group_id, room_id, professor, subject);
 
 
-    for (int i = 1; i <= 7; i++) {
-        for (int j = 1; j <= 7; j++) {
+    for (int i = 1; i <= Constants::DAYS_IN_WEEK; i++) {
+        for (int j = 1; j <= Constants::LECTURES_IN_DAY; j++) {
             if ((*start)->day_is_set(i, j)) {
 
                 std::shared_ptr<ScheduleTime> time = std::make_shared<ScheduleTime>(i, j);

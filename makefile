@@ -4,7 +4,9 @@ INCLDIRS = \
 	include/model \
 	include/interface \
 	include/logic \
-	include/utils
+	include/utils \
+	include/model/predicate \
+	include/model/schedule
 
 SRCDIR = src test
 
@@ -14,6 +16,8 @@ SRCDIRS = \
 	src/interface \
 	src/logic \
 	src/utils \
+	src/model/predicate \
+	src/model/schedule \
 	test/src
 
 OBJDIR = \
@@ -24,7 +28,9 @@ TESTOBJDIR = \
 
 
 
-DEPS = Splitter.hpp Interface.hpp UserInterface.hpp AdminInterface.hpp InfoBank.hpp Request.hpp Schedule.hpp \
+DEPS = BinaryPredicate.hpp LogicPredicate.hpp NegatePredicate.hpp Predicate.hpp \
+	RelationPredicate.hpp UnaryPredicate.hpp Splitter.hpp Interface.hpp UserInterface.hpp \
+	AdminInterface.hpp InfoBank.hpp Request.hpp Schedule.hpp \
 	ScheduleCell.hpp ScheduleCellEntry.hpp ScheduleTime.hpp ScheduleController.hpp
 
 
@@ -43,7 +49,7 @@ TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
 
 
 CC = g++
-DEBUG = --coverage
+DEBUG = --coverage -Wall 
 CFLAGS = -O2 -std=c++14 $(patsubst %, -I%, $(INCLDIRS)) $(DEBUG) 
 LFLAGS = $(CFLAGS)
 
@@ -54,7 +60,7 @@ vpath %.cpp $(SRCDIRS)
 vpath %.o $(OBJDIR)
 
 
-all: folders googletest lcov build test coverage
+all: folders googletest lcov build test
 
 runadmin:
 	@./admin_main
@@ -74,7 +80,7 @@ $(OBJDIR)/%.o: %.cpp $(DEPS)
 	@ $(CC) $(CFLAGS) -c -o $@ $<
 
 
-test: googletest $(TEST_OBJS) $(OBJS)
+test: googletest build $(TEST_OBJS) $(OBJS)
 	@ $(CC) $(CFLAGS) -o test_main $(TEST_OBJS) $(OBJS) -pthread libgtest.a
 	@ ./test_main
 

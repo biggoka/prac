@@ -12,8 +12,6 @@ bool ScheduleCell::add_entry(std::shared_ptr<ScheduleCellEntry> entry) {
         return false;
     }
 
-
-
     groups.insert(entry->group_id);
     rooms.insert(entry->room_id);
     professors.insert(entry->professor);
@@ -35,6 +33,7 @@ bool ScheduleCell::remove_entry(std::shared_ptr<ScheduleCellEntry> entry) {
             break;
         }
     }
+    return false;
 }
 
 

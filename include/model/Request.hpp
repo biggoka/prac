@@ -3,12 +3,14 @@
 #include <string>
 #include <vector>
 
+#include "Constants.hpp"
+
 class Request {
 public:
     std::string professor;
     std::string subject;
 
-    bool days[7][7]; // 7 days in a week by 7 pairs in a day; first is day in a week
+    bool days[Constants::DAYS_IN_WEEK][Constants::LECTURES_IN_DAY]; // 7 days in a week by 7 pairs in a day; first is day in a week
 
     int group_id;
     int room_id;

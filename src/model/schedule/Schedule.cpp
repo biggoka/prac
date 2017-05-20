@@ -3,12 +3,13 @@
 #include "ScheduleCell.hpp"
 #include "ScheduleCellEntry.hpp"
 #include "ScheduleTime.hpp"
+#include "Constants.hpp"
 
 #include <iostream>
 
 Schedule::Schedule() {
-    for (int i = 0; i <= 6; i++) {
-        for (int j = 0; j <= 6; j++) {
+    for (int i = 0; i < Constants::DAYS_IN_WEEK; i++) {
+        for (int j = 0; j < Constants::LECTURES_IN_DAY; j++) {
             cells[i][j] = std::make_shared<ScheduleCell>();
         }
     }
