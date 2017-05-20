@@ -54,7 +54,7 @@ vpath %.cpp $(SRCDIRS)
 vpath %.o $(OBJDIR)
 
 
-all: folders googletest lcov build test
+all: folders googletest lcov build test coverage
 
 runadmin:
 	@./admin_main
