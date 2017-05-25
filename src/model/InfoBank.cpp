@@ -13,6 +13,18 @@ void InfoBank::add_room(const int room) {
     rooms.insert(room);
 }
 
+void InfoBank::clear_subjects() {
+    subjects = std::set<std::string>();
+}
+
+void InfoBank::clear_groups() {
+    groups = std::set<int>();
+}
+
+void InfoBank::clear_rooms() {
+    rooms = std::set<int>();
+}
+
 const std::set<std::string> &InfoBank::get_subjects() const {
     return subjects;
 }
@@ -35,4 +47,46 @@ bool InfoBank::contains_group(const int group) const {
 
 bool InfoBank::contains_room(const int room) const {
     return rooms.find(room) != rooms.end();
+}
+
+bool InfoBank::is_equal(const InfoBank &b) const {
+    for (auto &sub: subjects) {
+        if (!b.contains_subject(sub)) {
+            return false;
+        }
+    }
+
+    for (auto &sub: b.get_subjects()) {
+        if (!contains_subject(sub)) {
+            return false;
+        }
+    }
+
+    for (auto &room: rooms) {
+        if (!b.contains_room(room)) {
+            return false;
+        }
+    }
+
+    for (auto &room: b.get_rooms()) {
+        if (!contains_room(room)) {
+            return false;
+        }
+    }
+
+    for (auto &group: groups) {
+        if (!b.contains_group(group)) {
+            return false;
+        }
+    }
+
+    for (auto &group: b.get_groups()) {
+        if (!contains_group(group)) {
+            return false;
+        }
+    }
+
+
+
+    return true;
 }

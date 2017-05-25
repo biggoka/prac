@@ -1,24 +1,22 @@
 #pragma once
 
-// #include "LoginController.hpp"
-//#include "ReportController.hpp"
-// #include <memory>
-
-//class User;
+#include <list>
+#include <memory>
 
 #include "InfoBank.hpp"
+#include "Request.hpp"
+
 
 class Interface {
+protected:
+    std::shared_ptr<InfoBank> bank;
+    std::list<std::shared_ptr<Request>> requests;
 public:
     void list_rooms() const;
     void list_groups() const;
+    void list_subjects() const;
+
+    void add_request();
+
     void list_requests() const;
-
-    //static Date read_date_cycle(const std::string &);
-
-protected:
-    InfoBank info_bank;
-    // std::shared_ptr<User> user;
-    // LoginController login_controller;
-    // ReportController report_controller;
 };

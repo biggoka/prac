@@ -25,6 +25,10 @@ void ScheduleController::remove_request(std::shared_ptr<Request> request) {
     }
 }
 
+void ScheduleController::print() {
+    schedule.print();
+}
+
 bool ScheduleController::recursive_try(std::list<std::shared_ptr<Request>>::iterator start,
     std::list<std::shared_ptr<Request>>::iterator end, int current, int depth) 
 {
@@ -43,12 +47,17 @@ bool ScheduleController::recursive_try(std::list<std::shared_ptr<Request>>::iter
         return false;
     }
 
+    if (!bank->contains_group(group_id)) {
+        return false;
+    }
+    if (!bank->contains_subject(subject)) {
+        return false;
+    }
+
     std::shared_ptr<ScheduleCellEntry> entry = std::make_shared<ScheduleCellEntry>(group_id, 0, professor, subject);
 
     for (auto &case_: cases) {
-        std::cout << "new case" << cases.size() << std::endl;
         for (auto &room: case_->rooms) {
-            std::cout << "new room" << case_->rooms.size() << "  " << current << std::endl;
             entry->room_id = room;
             for (int i = 1; i <= Constants::DAYS_IN_WEEK; i++) {
                 for (int j = 1; j <= Constants::LECTURES_IN_DAY; j++) {
@@ -77,7 +86,9 @@ bool ScheduleController::recursive_try(std::list<std::shared_ptr<Request>>::iter
     return false;
 }
 
-bool ScheduleController::generate_schedule() {
+bool ScheduleController::generate_schedule(std::shared_ptr<InfoBank> bank_) {
+    bank = bank_;
+
     if (requests.size() == 0) {
         return true;
     }

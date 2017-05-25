@@ -4,8 +4,8 @@
 
 namespace Constants {
     enum : int {
-        DAYS_IN_WEEK = 2,
-        LECTURES_IN_DAY = 2,
+        DAYS_IN_WEEK = 5,
+        LECTURES_IN_DAY = 7,
     };
 };
 

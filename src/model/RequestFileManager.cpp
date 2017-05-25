@@ -34,7 +34,7 @@ std::list<std::shared_ptr<Request>> RequestFileManager::read(std::shared_ptr<Inf
             break;
         }
 
-        std::cout << str << std::endl;
+        // std::cout << str << std::endl;
 
         auto req = RequestMaker::make_request(str, bank);
         requests.push_back(req);

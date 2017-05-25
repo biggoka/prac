@@ -85,22 +85,21 @@ TEST(CaseMakerVisitorTest, q6) {
     ASSERT_EQ(false, cases.front()->day_is_set(2,1));
 }
 
-// TEST(CaseMakerVisitorTest, q6) {
-//     Parser parser(0);
-//     auto pred = parser.parse("(wd == 1 | ln == 1) & room == 2");
+TEST(CaseMakerVisitorTest, q7) {
+    Parser parser(0);
+    auto bank = std::make_shared<InfoBank>();
 
-//     auto bank = std::make_shared<InfoBank>();
-//     bank->add_room(1);
+    bank->add_room(1);
+    auto pred = parser.parse("wd == 1 -> room == 1");
 
-//     CaseMakerVisitor visitor(bank);
-//     auto cases = visitor.make_cases(pred);
+    CaseMakerVisitor visitor(bank);
+    auto cases = visitor.make_cases(pred);
 
-//     ASSERT_EQ(0, cases.front()->room_options_count);
-//     ASSERT_EQ(0, cases.back()->room_options_count);
+    ASSERT_EQ(2, cases.size());
+    ASSERT_EQ(0, cases.front()->rooms.size());
+    ASSERT_EQ(false, cases.front()->day_is_set(1,1));
+    ASSERT_EQ(true, cases.front()->day_is_set(2,1));
+}
 
-//     bank->add_room(2);
-//     cases = visitor.make_cases(pred);
 
-//     ASSERT_EQ(1, cases.front()->room_options_count);
-//     ASSERT_EQ(1, cases.back()->room_options_count);
-// }
+

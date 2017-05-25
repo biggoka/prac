@@ -45,10 +45,9 @@ MAINS_ = user_main admin_main
 MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
 
 
-TESTS_ = ScheduleControllerTest.cpp test_all.cpp RequestFileManagerTest.cpp
+TESTS_ = SplitterTest.cpp InfoBankFileManagerTest.cpp ScheduleControllerTest.cpp test_all.cpp RequestFileManagerTest.cpp \
+	InfoBankTest.cpp ParserTest.cpp RequestTest.cpp RequestMakerTest.cpp CaseMakerVisitorTest.cpp
 
- # test_all.cpp SplitterTest.cpp InfoBankTest.cpp \
-	RequestTest.cpp ScheduleControllerTest.cpp ParserTest.cpp 
 
 TESTS = $(TESTS_:.cpp=.o)
 TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
@@ -102,7 +101,7 @@ clean:
 	@ rm -f obj/*.o main *.out *.o err.txt *.html admin_main user_main test_main tests obj/*.gcno obj/*.gcda \
 	test/obj/*.gcda test/obj/*.gcno app.info
 	@ rm -f test/obj/* libgtest.a
-	@ rm -rf coverage
+	@ rm -rf coverage persist
 	@ echo "Cleaned"
 
 FORCE:
