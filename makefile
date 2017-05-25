@@ -28,7 +28,10 @@ TESTOBJDIR = \
 
 
 
-DEPS = BinaryPredicate.hpp LogicPredicate.hpp NegatePredicate.hpp Predicate.hpp \
+DEPS = InfoBankFileManager.hpp RequestFileManager.hpp RequestMaker.hpp \
+	CaseMakerVisitor.hpp RequestCase.hpp PredicateVisitor.hpp Parser.hpp \
+	AndPredicate.hpp OrPredicate.hpp ImpPredicate.hpp BinaryPredicate.hpp \
+	LogicPredicate.hpp NegatePredicate.hpp Predicate.hpp \
 	RelationPredicate.hpp UnaryPredicate.hpp Splitter.hpp Interface.hpp UserInterface.hpp \
 	AdminInterface.hpp InfoBank.hpp Request.hpp Schedule.hpp \
 	ScheduleCell.hpp ScheduleCellEntry.hpp ScheduleTime.hpp ScheduleController.hpp
@@ -42,7 +45,10 @@ MAINS_ = user_main admin_main
 MAIN_OBJS = $(patsubst %, $(OBJDIR)/%.o, $(MAINS_))
 
 
-TESTS_ = test_all.cpp SplitterTest.cpp InfoBankTest.cpp RequestTest.cpp ScheduleControllerTest.cpp
+TESTS_ = ScheduleControllerTest.cpp test_all.cpp RequestFileManagerTest.cpp
+
+ # test_all.cpp SplitterTest.cpp InfoBankTest.cpp \
+	RequestTest.cpp ScheduleControllerTest.cpp ParserTest.cpp 
 
 TESTS = $(TESTS_:.cpp=.o)
 TEST_OBJS = $(patsubst %, $(TESTOBJDIR)/%, $(TESTS))
@@ -101,13 +107,16 @@ clean:
 
 FORCE:
 
-folders: test/obj obj
+folders: test/obj obj persist
 
 obj:
 	@ mkdir $@
 
 test/obj:
 	@ mkdir $@
+
+persist:
+	@ mkdir $@ 
 
 libgtest.a: 
 	@ echo Compiling Google Test

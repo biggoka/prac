@@ -1,5 +1,7 @@
 #include "gtest/gtest.h"
 
+#include "RequestFileManager.hpp"
+
 #include "ScheduleController.hpp"
 #include "Schedule.hpp"
 #include "Request.hpp"
@@ -16,13 +18,7 @@
 #include <iostream>
 
 
-TEST(ScheduleController, empty) {
-    ScheduleController controller;
-    ASSERT_EQ(true, controller.generate_schedule());
-}
-
-TEST(ScheduleController, sample) {
-
+TEST(RequestFileManagerTest, basic) {
     auto bank = std::make_shared<InfoBank>();
     bank->add_room(1);
     bank->add_room(2);
@@ -30,24 +26,16 @@ TEST(ScheduleController, sample) {
     std::list<std::shared_ptr<Request>> requests;
 
 
-    auto req = RequestMaker::make_request("108 matan slivinsky room == 1 & ln == 1  ", bank);
+    auto req = RequestMaker::make_request("108 matan slivinsky room == 1 & ln == 1 | ln == 1 | ln == 1 ", bank);
     requests.push_back(req);
     req = RequestMaker::make_request("101 matan kaledin room == 1 & ln == 1 & wd == 1  ", bank);
     requests.push_back(req);
     req = RequestMaker::make_request("108 matan slivinsky room == 1 & ln == 1  ", bank);
-    // requests.push_back(req);
-  
 
-    std::cout << requests.size() << std::endl;
+    RequestFileManager::write(requests);
+    auto new_requests = RequestFileManager::read(bank);
 
-    
-    ScheduleController controller;
-    for (auto &req: requests) {
-        controller.add_request(req);
-    }
-
-    ASSERT_EQ(true, controller.generate_schedule());
-
-    controller.schedule.print();
+    ASSERT_EQ(requests.size(), new_requests.size());
+    ASSERT_EQ(requests.front()->cases.size(), new_requests.front()->cases.size());
+    ASSERT_EQ(requests.back()->cases.size(), new_requests.back()->cases.size());
 }
-

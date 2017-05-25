@@ -8,6 +8,7 @@ exampleProj
 googletest
 lcov
 coverage
+persist
 
 
 test_main

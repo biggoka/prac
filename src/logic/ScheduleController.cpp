@@ -3,6 +3,7 @@
 #include <memory>
 #include <list>
 #include <string>
+#include <iostream>
 
 #include "Request.hpp"
 #include "Schedule.hpp"
@@ -25,44 +26,54 @@ void ScheduleController::remove_request(std::shared_ptr<Request> request) {
 }
 
 bool ScheduleController::recursive_try(std::list<std::shared_ptr<Request>>::iterator start,
-    std::list<std::shared_ptr<Request>>::iterator end) 
+    std::list<std::shared_ptr<Request>>::iterator end, int current, int depth) 
 {
     if (start == end) {
         return true;
     }
 
-    int group_id = (*start)->group_id;
-    int room_id = (*start)->room_id;
+    auto request = (*start);
 
-    std::string professor((*start)->professor);
-    std::string subject((*start)->subject);
+    int group_id = request->group_id;
+    std::string professor(request->professor);
+    std::string subject(request->subject);
+    auto &cases = request->cases;
 
-    std::shared_ptr<ScheduleCellEntry> entry = std::make_shared<ScheduleCellEntry>(group_id, room_id, professor, subject);
-
-
-    for (int i = 1; i <= Constants::DAYS_IN_WEEK; i++) {
-        for (int j = 1; j <= Constants::LECTURES_IN_DAY; j++) {
-            if ((*start)->day_is_set(i, j)) {
-
-                std::shared_ptr<ScheduleTime> time = std::make_shared<ScheduleTime>(i, j);
-
-                if (schedule.add_entry(entry, time)) {
-                    // continue;
-
-                    start++;
-                    if (recursive_try(start, end)) {
-                        return true;
-                    } else {
-                        start--;
-                        schedule.remove_entry(entry, time);
-                    }
-                    
-                }
-
-            }
-        }
+    if (cases.size() == 0) {
+        return false;
     }
 
+    std::shared_ptr<ScheduleCellEntry> entry = std::make_shared<ScheduleCellEntry>(group_id, 0, professor, subject);
+
+    for (auto &case_: cases) {
+        std::cout << "new case" << cases.size() << std::endl;
+        for (auto &room: case_->rooms) {
+            std::cout << "new room" << case_->rooms.size() << "  " << current << std::endl;
+            entry->room_id = room;
+            for (int i = 1; i <= Constants::DAYS_IN_WEEK; i++) {
+                for (int j = 1; j <= Constants::LECTURES_IN_DAY; j++) {
+                    if (case_->day_is_set(i, j)) {
+
+                        std::shared_ptr<ScheduleTime> time = std::make_shared<ScheduleTime>(i, j);
+
+                        if (schedule.add_entry(entry, time)) {
+
+                            start++;
+                            if (recursive_try(start, end, current + 1, depth)) {
+                                return true;
+                            } else {
+                                start--;
+                                schedule.remove_entry(entry, time);
+                            }
+                            
+                        }
+
+                    }
+                }
+            }
+
+        }
+    }
     return false;
 }
 
@@ -71,7 +82,7 @@ bool ScheduleController::generate_schedule() {
         return true;
     }
 
-    return recursive_try(requests.begin(), requests.end());
+    return recursive_try(requests.begin(), requests.end(), 1, requests.size());
 }
 
 

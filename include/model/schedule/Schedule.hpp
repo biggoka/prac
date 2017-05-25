@@ -18,4 +18,6 @@ public:
     bool add_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time);
 
     void remove_entry(std::shared_ptr<ScheduleCellEntry> entry, std::shared_ptr<ScheduleTime> time);
+
+    void print();
 };

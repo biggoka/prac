@@ -4,45 +4,42 @@
 #include <stdexcept>
 
 Request::Request() {
-    for (int i = 0; i < Constants::DAYS_IN_WEEK; i++) {
-        for (int j = 0; j < Constants::LECTURES_IN_DAY; j++) {
-            days[i][j] = false;
-        }
-    }
+    
 }
 
-void Request::set_day(int week_day, int pair_number, bool is) {
-    if (week_day > Constants::DAYS_IN_WEEK or week_day < 1 or pair_number > Constants::LECTURES_IN_DAY or pair_number < 1) {
-        throw std::invalid_argument("wrong argument in Request::set_day");
-    }
-    days[week_day - 1][pair_number - 1] = is;
-}
-
-bool Request::day_is_set(int week_day, int pair_number) const {
-    if (week_day > Constants::DAYS_IN_WEEK or week_day < 1 or pair_number > Constants::LECTURES_IN_DAY or pair_number < 1) {
-        throw std::invalid_argument("wrong argument in Request::set_day");
-    }
-
-    return days[week_day - 1][pair_number - 1];
-}
 
 bool Request::operator==(const Request &r) const {
-    for (int i = 0; i < Constants::DAYS_IN_WEEK; i++) {
-        for (int j = 0; j < Constants::LECTURES_IN_DAY; j++) {
-            if (days[i][j] != r.days[i][j]) {
-                return false;
-            }
-        }
+    if (cases != r.cases) {
+        return false;
     }
 
     if (professor != r.professor or \
         subject != r.subject or \
-        group_id != r.group_id or \
-        room_id != r.room_id) 
+        group_id != r.group_id) 
     {
+        return false;
+    }
+
+    if (this != &r) {
         return false;
     }
 
     return true;
 
+}
+
+bool Request::equal_to(const Request &r) const {
+    // if (cases != r.cases) {
+    //     return false;
+    // }
+
+    if (professor != r.professor or \
+        subject != r.subject or \
+        group_id != r.group_id) 
+    {
+        return false;
+    }
+
+
+    return true;
 }
